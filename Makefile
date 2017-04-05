@@ -1,6 +1,6 @@
-#simple make for helloworld
+
 #slashes go / for linux compile
-#change dockerfile too to copy from subfolder
+
 FC=gfortran
 
 $(ENAME): my_declarations.o my_write.o my_sim_model.o test_fort_json.o
