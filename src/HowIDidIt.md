@@ -39,3 +39,5 @@ What are all these % signs in the code? It's the equivalent of the . in C++. Mak
 ### What is left to figure out?
 
 It seems easy to read the JSON file if we know the name of the item, and the type that it is supposed to be. Also seems to make sense that Fortran would really need to know before reading what type we are reading in. Could we just look for every single item that it **could** be and override a default? Is there a better way?
+
+And non-trivially, need to sort out an array read and make sure that it comes in the right way.
