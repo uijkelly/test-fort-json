@@ -11,4 +11,27 @@ Homebrew to install didn't quite seem to do the trick, so went with manual downl
 
 Then once FoBiS was installed, ran <code>sh build.sh</code> in the json-fortran directory to build the module, and runs some unit tests.
 
-Now the module files are in <code>json-fortran/lib</code>, and all I have to do is figure out how to include them in this here project! For now, not being fancy, and will just copy them over to the main folder and go from there. 
+Now the module files are in <code>json-fortran/lib</code>, and all I have to do is figure out how to include them in this here project! For now, not being fancy, and will just copy them over to the main folder and go from there.
+
+### gfortran with a static library
+
+In the makefile, where the main executable is being built, specify the location of the library and the name. gfortran will look for a naming convention here of <code>lib[whatyouspecified].a</code> so in my makefile here I have:
+
+```
+$(ENAME): my_declarations.o my_write.o my_sim_model.o test_fort_json.o
+	gfortran my_declarations.o my_write.o my_sim_model.o test_fort_json.o -o $(ENAME) -g -ffree-line-length-none -I/Users/jkelly/projects/fortran/json-fortran/lib -L/Users/jkelly/projects/fortran/json-fortran/lib -ljsonfortran
+```
+
+the <code>-L</code> gives the full path to the location of the library and the <code>-l</code> gives the name to look for. It will find the file <code>/Users/jkelly/projects/fortran/json-fortran/libjsonfortran.a</code> and include that in the linking step.
+
+
+### using the json library
+
+More in that makefile, the <code>-I</code> flag gives the definition to the additional include libraries. It is not only in the line that defines the executable, but also the compiling of the file that uses things
+
+```
+my_sim_model.o: src/my_sim_model.f90
+	gfortran -c -g -ffree-line-length-none -I/Users/jkelly/projects/fortran/json-fortran/lib src/my_sim_model.f90
+```
+
+What are all these % signs in the code?

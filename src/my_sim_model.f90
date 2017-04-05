@@ -10,12 +10,30 @@ module my_sim_model
 use my_declarations
 use json_module
 implicit none
+
+
+type(json_file) :: json
+logical :: found
+integer :: i,j,k
+
 contains
+
+
 
 ! use json read
 ! these variables declared in my_declarations
 subroutine set_parameters
-  write(*,*) "doing nothing, just in set parameters"
+  write(*,*) "here we go, setting parameters"
+
+  ! initialize the json class
+  call json%initialize()
+  ! read the file
+  ! calling from the parent directory, so need to go into the sub directory
+  ! if the file isn't found, nothing happens - no error, so need to add something
+  ! to take care of that.
+  call json%load_file(filename = 'src/params.json')
+  ! print the file to the console
+  call json%print_file()
 end subroutine set_parameters
 
 ! do some actual work these are bracket rules
