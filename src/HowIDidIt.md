@@ -34,4 +34,8 @@ my_sim_model.o: src/my_sim_model.f90
 	gfortran -c -g -ffree-line-length-none -I/Users/jkelly/projects/fortran/json-fortran/lib src/my_sim_model.f90
 ```
 
-What are all these % signs in the code?
+What are all these % signs in the code? It's the equivalent of the . in C++. Makes complete sense.
+
+### What is left to figure out?
+
+It seems easy to read the JSON file if we know the name of the item, and the type that it is supposed to be. Also seems to make sense that Fortran would really need to know before reading what type we are reading in. Could we just look for every single item that it **could** be and override a default? Is there a better way?

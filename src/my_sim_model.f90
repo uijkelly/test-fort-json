@@ -14,7 +14,7 @@ implicit none
 
 type(json_file) :: json
 logical :: found
-integer :: i,j,k
+integer :: i,j,k ! might not need these, placeholders for reading in data
 
 contains
 
@@ -23,7 +23,7 @@ contains
 ! use json read
 ! these variables declared in my_declarations
 subroutine set_parameters
-  write(*,*) "here we go, setting parameters"
+  write(*,*) "Here we go, setting parameters"
 
   ! initialize the json class
   call json%initialize()
@@ -33,7 +33,20 @@ subroutine set_parameters
   ! to take care of that.
   call json%load_file(filename = 'src/params.json')
   ! print the file to the console
-  call json%print_file()
+  !call json%print_file()
+
+  ! start to get the data when we know the name of it and what type it is
+  ! here totsim is an integer and saved into the TOTSIM variable
+  call json%get('TOTSIM', TOTSIM, found)
+  if (.not. found) then
+    write(*,*) "Could not find TOTSIM"
+  else
+    write(*,*) "Found TOTSIM ", TOTSIM
+  end if
+
+
+
+
 end subroutine set_parameters
 
 ! do some actual work these are bracket rules
