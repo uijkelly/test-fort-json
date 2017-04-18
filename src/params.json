@@ -1,5 +1,5 @@
 {
-  "FILE7" : "/output/test-fort-json-output.txt",
+  "FILE7" : "test-fort-json-output.txt",
   "TOTSIM": 2,
   "MAXBRACK": 7,
   "NBRACK": [7,7],

@@ -13,6 +13,7 @@ program test_fort_json
   write(*,*) "Using Fortran with input as JSON"
   write(*,*) "reading the parameters from the json file"
   CALL set_parameters
+  call my_sim_main
 
   write(*,*) ""
 

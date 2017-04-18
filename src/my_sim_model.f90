@@ -43,8 +43,19 @@ subroutine set_parameters
   else
     write(*,*) "Found TOTSIM ", TOTSIM
   end if
+  !throwing an error
+  !known bug https://github.com/jacobwilliams/json-fortran/issues/245
+  !so probably will want to just set these file paths in a separate file. 
+  !call json%get('FILE7', FILE7, found)
 
+  call json%get('NBRACK', NBRACK, found)
+  if (.not. found) then
+    write(*,*) "Could not find NBRACK"
+  else
+    write(*,*) "Found NBRACK ", NBRACK
+  end if
 
+  write(*,*) "nbrack1 =", NBRACK(1)
 
 
 end subroutine set_parameters
@@ -58,7 +69,7 @@ end subroutine
 ! run the thing
 subroutine my_sim_main
   call calc_bracket
-  call writeit ! in my_write
+  !call writeit ! in my_write
 end subroutine my_sim_main
 
 
