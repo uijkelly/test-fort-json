@@ -15,8 +15,8 @@ implicit none
 type(json_file) :: json
 logical :: found
 integer :: i,j,k ! might not need these, placeholders for reading in data
-REAL*8, DIMENSION (:), ALLOCATABLE :: TEMP_ARR
-
+REAL*8, DIMENSION (:), ALLOCATABLE :: TEMP_ARR !placeholder for reading data.
+character*7 :: label
 contains
 
 
@@ -89,7 +89,7 @@ subroutine set_parameters
   if (.not. found) then
     write(*,*) "Could not find SBRACK1"
   else
-    write(*,*) "Found SBRACK1", TEMP_ARR
+    !write(*,*) "Found SBRACK1", TEMP_ARR
     SBRACK(1,:) = TEMP_ARR(1:) ! copy all of temp_array into the first col of SBRACK
   end if
 ! END MAKE INTO A FUNCTION
@@ -98,47 +98,84 @@ subroutine set_parameters
   if (.not. found) then
     write(*,*) "Could not find SBRACK2"
   else
-    write(*,*) "Found SBRACK2", TEMP_ARR
+    !write(*,*) "Found SBRACK2", TEMP_ARR
     SBRACK(2,:) = TEMP_ARR(1:) ! copy all of temp_array into the first col of SBRACK
   end if
   call json%get('SBRACK3', TEMP_ARR, found)
   if (.not. found) then
     write(*,*) "Could not find SBRACK3"
   else
-    write(*,*) "Found SBRACK3", TEMP_ARR
+    !write(*,*) "Found SBRACK3", TEMP_ARR
     SBRACK(3,:) = TEMP_ARR(1:) ! copy all of temp_array into the first col of SBRACK
   end if
   call json%get('SBRACK4', TEMP_ARR, found)
   if (.not. found) then
     write(*,*) "Could not find SBRACK4"
   else
-    write(*,*) "Found SBRACK4", TEMP_ARR
+    !write(*,*) "Found SBRACK4", TEMP_ARR
     SBRACK(4,:) = TEMP_ARR(1:) ! copy all of temp_array into the first col of SBRACK
   end if
   call json%get('SBRACK5', TEMP_ARR, found)
   if (.not. found) then
     write(*,*) "Could not find SBRACK5"
   else
-    write(*,*) "Found SBRACK5", TEMP_ARR
+    !write(*,*) "Found SBRACK5", TEMP_ARR
     SBRACK(5,:) = TEMP_ARR(1:) ! copy all of temp_array into the first col of SBRACK
   end if
   call json%get('SBRACK6', TEMP_ARR, found)
   if (.not. found) then
     write(*,*) "Could not find SBRACK6"
   else
-    write(*,*) "Found SBRACK6", TEMP_ARR
+    !write(*,*) "Found SBRACK6", TEMP_ARR
     SBRACK(6,:) = TEMP_ARR(1:) ! copy all of temp_array into the first col of SBRACK
   end if
-  call json%get('SBRACK7', TEMP_ARR, found)
-  if (.not. found) then
-    write(*,*) "Could not find SBRACK7"
-  else
-    write(*,*) "Found SBRACK7", TEMP_ARR
-    SBRACK(7,:) = TEMP_ARR(1:) ! copy all of temp_array into the first col of SBRACK
-  end if
 
-  !write(*,*) "SBRACK = ", SBRACK
+  !
+  !call json%get('SBRACK7', TEMP_ARR, found)
+  !if (.not. found) then
+  !  write(*,*) "Could not find SBRACK7"
+  !else
+  !  write(*,*) "Found SBRACK7", TEMP_ARR
+  !  SBRACK(7,:) = TEMP_ARR(1:) ! copy all of temp_array into the first col of SBRACK
+  !end if
+  label = "SBRACK7"
+  call read_one_dim_into_two(label, TEMP_ARR, SBRACK, 7)
+
+  write(*,*) "SBRACK = ", SBRACK
+
 end subroutine set_parameters
+
+! Description: Subroutine to set a part of a two dimensional array with a one dimensional array
+!  so for example, will read all of SBRACK1 and put into first col of SBRACK
+! Arguments:
+!  FIELDNAME - the one dimensional array to read from JSON, eg: SBRACK1, RATES1 etc
+!  TEMP_ARR  - a temporary array to read this data into. intend to copy over and over. but
+!              this routine will not clear it first, if that's an issue, do before or after this
+!              is called.
+!  FINAL_ARR - the two dimensional array that we are copying into. eg: SBRACK, RATES etc
+!  col       - the column in the two dimensional array that we are copying to.
+subroutine read_one_dim_into_two(FIELDNAME, TEMP_ARR, FINAL_ARR, col)
+  type(json_file) :: json
+  logical :: found
+  REAL*8, DIMENSION (:), ALLOCATABLE :: TEMP_ARR !placeholder for reading data.
+  REAL*8, DIMENSION (:,:), ALLOCATABLE :: FINAL_ARR
+  character*19 :: FIELDNAME ! this length is going to be a problem.
+  INTEGER :: col
+  write(*,*) "Fieldname = ", FIELDNAME
+  write(*,*) "Trimmed fieldname = ", TRIM(FIELDNAME)
+  call json%load_file(filename = 'src/params.json') ! have to have the file open here or else won't find.
+
+  call json%get(TRIM(FIELDNAME), TEMP_ARR, found)
+  if (found) then
+     FINAL_ARR(col,:) = TEMP_ARR(1:)
+  else
+    write(*,*) "DID not find FIELDNAME = ", TRIM(FIELDNAME)
+  end if
+end subroutine
+
+
+
+
 
 ! do some actual work these are bracket rules
 subroutine calc_bracket
