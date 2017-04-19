@@ -1,4 +1,10 @@
 ! Declaring some global variables
+
+! Remarks:
+!   SBRACK should be:
+
+
+
 module my_declarations
   SAVE
 

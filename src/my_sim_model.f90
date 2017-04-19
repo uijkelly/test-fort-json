@@ -15,6 +15,7 @@ implicit none
 type(json_file) :: json
 logical :: found
 integer :: i,j,k ! might not need these, placeholders for reading in data
+REAL*8, DIMENSION (:), ALLOCATABLE :: TEMP_ARR
 
 contains
 
@@ -23,6 +24,7 @@ contains
 ! use json read
 ! these variables declared in my_declarations
 subroutine set_parameters
+
   write(*,*) "Here we go, setting parameters"
 
   ! initialize the json class
@@ -39,14 +41,31 @@ subroutine set_parameters
   ! here totsim is an integer and saved into the TOTSIM variable
   call json%get('TOTSIM', TOTSIM, found)
   if (.not. found) then
-    write(*,*) "Could not find TOTSIM"
+    write(*,*) "Could not find TOTSIM" !TODO, this should exit because it's a real problem
   else
     write(*,*) "Found TOTSIM ", TOTSIM
   end if
+
+  call json%get('MAXBRACK', MAXBRACK, found)
+  if (.not. found) then
+    write(*,*) "Could not found MAXBRACK" !TODO, this should exit because it's a real problem
+  else
+    write(*,*) "Found MAXBRACK", MAXBRACK
+  end if
+
+  ! Once we have the size from the JSON, then allocate the space.
+  ALLOCATE ( SBRACK				(MAXBRACK, TOTSIM) )
+  ALLOCATE ( MBRACK				(MAXBRACK, TOTSIM) )
+  ALLOCATE ( HBRACK				(MAXBRACK, TOTSIM) )
+
+  write(*,*) "SBRACK before assigning", SBRACK
+
   !throwing an error
   !known bug https://github.com/jacobwilliams/json-fortran/issues/245
-  !so probably will want to just set these file paths in a separate file. 
+  !so probably will want to just set these file paths in a separate file.
+  ! but should try out any new solution, too
   !call json%get('FILE7', FILE7, found)
+  !write(*,*)"FILE7 = ", FILE7
 
   call json%get('NBRACK', NBRACK, found)
   if (.not. found) then
@@ -57,6 +76,24 @@ subroutine set_parameters
 
   write(*,*) "nbrack1 =", NBRACK(1)
 
+  ! SBRACK1 - SBRACK7 ( that 7 is set by MAXBRACK), are saved to SBRACK
+  ! Similarly, HBRACK and MBRACK are HBRACK1 - HBRACK7 and MBRACK1 - MBRACK7
+  ! These aren't actual parameters that we are going to let vary at this point
+  ! in time, but they are the same type.
+  ! Though they are stored in the model as reals, not keeping decimals? needs investigating.
+
+! MAKE INTO A FUNCTION
+  ! read sbrack1 into temp_arr
+  call json%get('SBRACK1', TEMP_ARR, found)
+  !call json%get('SBRACK1', SBRACK(1), found) ! would like to do something like this
+  if (.not. found) then
+    write(*,*) "Could not find SBRACK1"
+  else
+    write(*,*) "Found SBRACK1", TEMP_ARR
+  end if
+  SBRACK(1,:) = TEMP_ARR(1:) ! copy all of temp_array into the first col of SBRACK
+  write(*,*) "SBRACK = ", SBRACK
+! END MAKE INTO A FUNCTION
 
 end subroutine set_parameters
 
