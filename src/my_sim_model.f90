@@ -90,11 +90,54 @@ subroutine set_parameters
     write(*,*) "Could not find SBRACK1"
   else
     write(*,*) "Found SBRACK1", TEMP_ARR
+    SBRACK(1,:) = TEMP_ARR(1:) ! copy all of temp_array into the first col of SBRACK
   end if
-  SBRACK(1,:) = TEMP_ARR(1:) ! copy all of temp_array into the first col of SBRACK
-  write(*,*) "SBRACK = ", SBRACK
 ! END MAKE INTO A FUNCTION
 
+  call json%get('SBRACK2', TEMP_ARR, found)
+  if (.not. found) then
+    write(*,*) "Could not find SBRACK2"
+  else
+    write(*,*) "Found SBRACK2", TEMP_ARR
+    SBRACK(2,:) = TEMP_ARR(1:) ! copy all of temp_array into the first col of SBRACK
+  end if
+  call json%get('SBRACK3', TEMP_ARR, found)
+  if (.not. found) then
+    write(*,*) "Could not find SBRACK3"
+  else
+    write(*,*) "Found SBRACK3", TEMP_ARR
+    SBRACK(3,:) = TEMP_ARR(1:) ! copy all of temp_array into the first col of SBRACK
+  end if
+  call json%get('SBRACK4', TEMP_ARR, found)
+  if (.not. found) then
+    write(*,*) "Could not find SBRACK4"
+  else
+    write(*,*) "Found SBRACK4", TEMP_ARR
+    SBRACK(4,:) = TEMP_ARR(1:) ! copy all of temp_array into the first col of SBRACK
+  end if
+  call json%get('SBRACK5', TEMP_ARR, found)
+  if (.not. found) then
+    write(*,*) "Could not find SBRACK5"
+  else
+    write(*,*) "Found SBRACK5", TEMP_ARR
+    SBRACK(5,:) = TEMP_ARR(1:) ! copy all of temp_array into the first col of SBRACK
+  end if
+  call json%get('SBRACK6', TEMP_ARR, found)
+  if (.not. found) then
+    write(*,*) "Could not find SBRACK6"
+  else
+    write(*,*) "Found SBRACK6", TEMP_ARR
+    SBRACK(6,:) = TEMP_ARR(1:) ! copy all of temp_array into the first col of SBRACK
+  end if
+  call json%get('SBRACK7', TEMP_ARR, found)
+  if (.not. found) then
+    write(*,*) "Could not find SBRACK7"
+  else
+    write(*,*) "Found SBRACK7", TEMP_ARR
+    SBRACK(7,:) = TEMP_ARR(1:) ! copy all of temp_array into the first col of SBRACK
+  end if
+
+  !write(*,*) "SBRACK = ", SBRACK
 end subroutine set_parameters
 
 ! do some actual work these are bracket rules
