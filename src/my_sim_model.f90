@@ -16,7 +16,8 @@ type(json_file) :: json
 logical :: found
 integer :: i,j,k ! might not need these, placeholders for reading in data
 REAL*8, DIMENSION (:), ALLOCATABLE :: TEMP_ARR !placeholder for reading data.
-character*7 :: label
+character*7 :: label7 ! the 7 means this is 7 char long
+character*6 :: label6 ! the 6 means this is 6 char long
 contains
 
 
@@ -58,6 +59,8 @@ subroutine set_parameters
   ALLOCATE ( MBRACK				(MAXBRACK, TOTSIM) )
   ALLOCATE ( HBRACK				(MAXBRACK, TOTSIM) )
 
+  ALLOCATE ( RATES				(MAXBRACK, TOTSIM) )
+
   write(*,*) "SBRACK before assigning", SBRACK
 
   !throwing an error
@@ -83,65 +86,42 @@ subroutine set_parameters
   ! Though they are stored in the model as reals, not keeping decimals? needs investigating.
 
 ! MAKE INTO A FUNCTION
+
   ! read sbrack1 into temp_arr
-  call json%get('SBRACK1', TEMP_ARR, found)
-  !call json%get('SBRACK1', SBRACK(1), found) ! would like to do something like this
-  if (.not. found) then
-    write(*,*) "Could not find SBRACK1"
-  else
-    !write(*,*) "Found SBRACK1", TEMP_ARR
-    SBRACK(1,:) = TEMP_ARR(1:) ! copy all of temp_array into the first col of SBRACK
-  end if
-! END MAKE INTO A FUNCTION
-
-  call json%get('SBRACK2', TEMP_ARR, found)
-  if (.not. found) then
-    write(*,*) "Could not find SBRACK2"
-  else
-    !write(*,*) "Found SBRACK2", TEMP_ARR
-    SBRACK(2,:) = TEMP_ARR(1:) ! copy all of temp_array into the first col of SBRACK
-  end if
-  call json%get('SBRACK3', TEMP_ARR, found)
-  if (.not. found) then
-    write(*,*) "Could not find SBRACK3"
-  else
-    !write(*,*) "Found SBRACK3", TEMP_ARR
-    SBRACK(3,:) = TEMP_ARR(1:) ! copy all of temp_array into the first col of SBRACK
-  end if
-  call json%get('SBRACK4', TEMP_ARR, found)
-  if (.not. found) then
-    write(*,*) "Could not find SBRACK4"
-  else
-    !write(*,*) "Found SBRACK4", TEMP_ARR
-    SBRACK(4,:) = TEMP_ARR(1:) ! copy all of temp_array into the first col of SBRACK
-  end if
-  call json%get('SBRACK5', TEMP_ARR, found)
-  if (.not. found) then
-    write(*,*) "Could not find SBRACK5"
-  else
-    !write(*,*) "Found SBRACK5", TEMP_ARR
-    SBRACK(5,:) = TEMP_ARR(1:) ! copy all of temp_array into the first col of SBRACK
-  end if
-  call json%get('SBRACK6', TEMP_ARR, found)
-  if (.not. found) then
-    write(*,*) "Could not find SBRACK6"
-  else
-    !write(*,*) "Found SBRACK6", TEMP_ARR
-    SBRACK(6,:) = TEMP_ARR(1:) ! copy all of temp_array into the first col of SBRACK
-  end if
-
-  !
-  !call json%get('SBRACK7', TEMP_ARR, found)
-  !if (.not. found) then
-  !  write(*,*) "Could not find SBRACK7"
-  !else
-  !  write(*,*) "Found SBRACK7", TEMP_ARR
-  !  SBRACK(7,:) = TEMP_ARR(1:) ! copy all of temp_array into the first col of SBRACK
-  !end if
-  label = "SBRACK7"
-  call read_one_dim_into_two(label, TEMP_ARR, SBRACK, 7)
+  ! write loop? something?
+  label7 = "SBRACK1"
+  call read_one_dim_into_two(label7, TEMP_ARR, SBRACK, 1)
+  label7 = "SBRACK2"
+  call read_one_dim_into_two(label7, TEMP_ARR, SBRACK, 2)
+  label7 = "SBRACK3"
+  call read_one_dim_into_two(label7, TEMP_ARR, SBRACK, 3)
+  label7 = "SBRACK4"
+  call read_one_dim_into_two(label7, TEMP_ARR, SBRACK, 4)
+  label7 = "SBRACK5"
+  call read_one_dim_into_two(label7, TEMP_ARR, SBRACK, 5)
+  label7 = "SBRACK6"
+  call read_one_dim_into_two(label7, TEMP_ARR, SBRACK, 6)
+  label7 = "SBRACK7"
+  call read_one_dim_into_two(label7, TEMP_ARR, SBRACK, 7)
 
   write(*,*) "SBRACK = ", SBRACK
+
+
+  label6 = "RATES1"
+  call read_one_dim_into_two(label6, TEMP_ARR, RATES, 1)
+  label6 = "RATES2"
+  call read_one_dim_into_two(label6, TEMP_ARR, RATES, 2)
+  label6 = "RATES3"
+  call read_one_dim_into_two(label6, TEMP_ARR, RATES, 3)
+  label6 = "RATES4"
+  call read_one_dim_into_two(label6, TEMP_ARR, RATES, 4)
+  label6 = "RATES5"
+  call read_one_dim_into_two(label6, TEMP_ARR, RATES, 5)
+  label6 = "RATES6"
+  call read_one_dim_into_two(label6, TEMP_ARR, RATES, 6)
+  label6 = "RATES7"
+  call read_one_dim_into_two(label6, TEMP_ARR, RATES, 7)
+  write(*,*) "RATES = ", RATES
 
 end subroutine set_parameters
 
@@ -159,12 +139,12 @@ subroutine read_one_dim_into_two(FIELDNAME, TEMP_ARR, FINAL_ARR, col)
   logical :: found
   REAL*8, DIMENSION (:), ALLOCATABLE :: TEMP_ARR !placeholder for reading data.
   REAL*8, DIMENSION (:,:), ALLOCATABLE :: FINAL_ARR
-  character*19 :: FIELDNAME ! this length is going to be a problem.
+  character(len=*) :: FIELDNAME
   INTEGER :: col
-  write(*,*) "Fieldname = ", FIELDNAME
-  write(*,*) "Trimmed fieldname = ", TRIM(FIELDNAME)
+  !write(*,*) "Fieldname = ", FIELDNAME
+  !write(*,*) "Trimmed fieldname = ", TRIM(FIELDNAME)
   call json%load_file(filename = 'src/params.json') ! have to have the file open here or else won't find.
-
+                                                    ! inefficient?
   call json%get(TRIM(FIELDNAME), TEMP_ARR, found)
   if (found) then
      FINAL_ARR(col,:) = TEMP_ARR(1:)

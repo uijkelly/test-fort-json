@@ -11,6 +11,8 @@ Homebrew to install didn't quite seem to do the trick, so went with manual downl
 
 Then once FoBiS was installed, ran <code>sh build.sh</code> in the json-fortran directory to build the module, and runs some unit tests.
 
+Though the latest update I ran on 21 Apr 2017 throws some segmentation errors, so will have to sort this out.
+
 Now the module files are in <code>json-fortran/lib</code>, and all I have to do is figure out how to include them in this here project! To start, not being fancy, and will just copy them over to the main folder and go from there. But did eventually figure out makefile and gfortran details to leave in the folder where they are which is better. Details of that below.
 
 ### gfortran with a static library
@@ -38,6 +40,6 @@ What are all these % signs in the code? It's the equivalent of the . in C++. Mak
 
 ### What is left to figure out?
 
-It seems easy to read the JSON file if we know the name of the item, and the type that it is supposed to be. Also seems to make sense that Fortran would really need to know before reading what type we are reading in. Could we just look for every single item that it **could** be and override a default? Is there a better way? This is important because we want to vary what is input, and not break anything, and also need to know how to look up things. Plus, only want to write the code to read the file once. But it would break if we added a new item and didn't edit the code to read that new item. Order though will no longer matter. 
+It seems easy to read the JSON file if we know the name of the item, and the type that it is supposed to be. Also seems to make sense that Fortran would really need to know before reading what type we are reading in. Could we just look for every single item that it **could** be and override a default? Is there a better way? This is important because we want to vary what is input, and not break anything, and also need to know how to look up things. Plus, only want to write the code to read the file once. But it would break if we added a new item and didn't edit the code to read that new item. Order though will no longer matter.
 
 And non-trivially, need to sort out an array read and make sure that it comes in the right way.
