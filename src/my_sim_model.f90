@@ -168,8 +168,8 @@ subroutine set_parameters_system
   ! here are the elements that we expect to find
   ! ID, FORMAT, CONTROL, EDIT_INTERNALLY, EDIT_EXTERNALLY, HTMLTYPE, HELP_ID,
   ! LABEL, DESCRIPTION, GROUPNAME, ROWNUM, PARAM, VAL
-  integer:: ID, CONTROL, EDIT_INTERNALLY, EDIT_EXTERNALLY, HTMLTYPE, HELP_ID, ROWNUM
-  character(len=20) :: FORMAT, LABEL, DESCRIPTION, GROUPNAME, PARAM, VAL
+  integer, target:: ID, CONTROL, EDIT_INTERNALLY, EDIT_EXTERNALLY, HTMLTYPE, HELP_ID, ROWNUM
+  character(len=:), allocatable :: FORMAT, LABEL, DESCRIPTION, GROUPNAME, PARAM, VAL
   logical :: found
   type(json_core) :: json
   type(json_value),pointer :: p,p1,p2
@@ -181,21 +181,48 @@ subroutine set_parameters_system
   ! This fortran type should be added to the database and sent as another key-value pair
   ! For now, just going to make some assumptions.
 
-  call json%parse(file='src/form_params_system.json', p=p)
+  call json%parse(file='src/form_params_system.json', p=p) ! put it all into p
   !call json%print(p,output_unit)
-  call json%get(p,"(1).ID",p1) ! since there is no name, just use the index to get at the element.
-  call json%print(p1,output_unit) ! this should return 2, the value of ID for the first record.
-  !call json%get(p,"system(10).ID",p1) ! there is no 10
+  call json%get(p,"(1).ID",ID) ! since there is no name, just use the index to get at the element.
+  write(*,*) "from full json ID = ",ID
+  ID = 0 !temp reset so i know i'm setting again to the json read value
+  ! to get the whole thing that is just the first object, it would be
+  call json%get(p,"(1)",p1) ! put it all into p1
+  call json%print(p1,output_unit)
+  !then get the id out of p1
+  ! so at this point, we know what items we (should) have.
+  ! but get and string is throwing an error?
+  ! same as before, so need to deal with https://github.com/jacobwilliams/json-fortran/issues/245
+  ! it's a type issue. set len=:
+  call json%get(p1,"PARAM",PARAM)
+  call json%get(p1,"VAL", VAL)
+  call json%get(p1,"CONTROL",CONTROL)
+  write(*,*) "from first object only PARAM = ",PARAM
+  write(*,*) "from first object only VAL = ", VAL
+  ! so now just need to set the "real" variable named the value of PARAM to be the value VAL
+  ! and of course that's going to be a long piece of code.
 
-  !call json%get(p1, "ID(1)",p2)
-  !call json%print(p2,output_unit)
-!get(data(1).array(1))
+  ! so perhaps the thing to do is to gradually add this. to add for the first 100 that
+  ! we will be sending this way and then add them as we go along.
+
+
+  ! what i want to do here is to look at the "PARAM" field, get the name, and then
+  ! map that to a variable of the same name. which is maybe not going to be so easy when
+  ! it could be one of 1500 things.
+  !call json%get(p)
 
   ! for testing from unit test code
   !call json%parse(p, '{"cities": ["New York","Los Angeles","Chicago"], '//&
   !                       '"value": 1, "iflag": true, "struct":{"vec":[1,2,3]}}')
   !call json%get(p,"cities",p1)
   !call json%print(p1,output_unit)
+end subroutine
+
+! Description: Array rules
+!  Let's see what kind of fun craziness we get into here. Hopefully any issues can be
+!  Addressed when we get to the query and create the JSON piece
+subroutine set_parameters_yearly
+
 end subroutine
 
 
