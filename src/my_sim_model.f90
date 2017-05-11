@@ -4,11 +4,16 @@
 ! next step will be doing some work
 ! and writing some output to a file.
 !
+! TODO: try initializing label to 128 and all blank. then try trimming or a substring or something
+!
 ! Jessica A Kelly
 
 module my_sim_model
 use my_declarations
 use json_module
+use json_file_module
+use json_value_module !for parse
+use, intrinsic :: iso_fortran_env , only: error_unit, output_unit
 implicit none
 
 
@@ -22,8 +27,9 @@ contains
 
 
 
-! use json read
+! Description: use json read for file src/params.json
 ! these variables declared in my_declarations
+!
 subroutine set_parameters
 
   write(*,*) "Here we go, setting parameters"
@@ -153,7 +159,46 @@ subroutine read_one_dim_into_two(FIELDNAME, TEMP_ARR, FINAL_ARR, col)
   end if
 end subroutine
 
+! Description: Use json file form_params_system.json
+!  System-level parameters of interest for us (in this test) are TOTSIM
+!  and MAXBRACK. Both defined inside this json file (but not the only thing)
+subroutine set_parameters_system
+  !type(json_file) :: json
+  !type(json_value),pointer :: p
+  ! here are the elements that we expect to find
+  ! ID, FORMAT, CONTROL, EDIT_INTERNALLY, EDIT_EXTERNALLY, HTMLTYPE, HELP_ID,
+  ! LABEL, DESCRIPTION, GROUPNAME, ROWNUM, PARAM, VAL
+  integer:: ID, CONTROL, EDIT_INTERNALLY, EDIT_EXTERNALLY, HTMLTYPE, HELP_ID, ROWNUM
+  character(len=20) :: FORMAT, LABEL, DESCRIPTION, GROUPNAME, PARAM, VAL
+  logical :: found
+  type(json_core) :: json
+  type(json_value),pointer :: p,p1,p2
+  write(*,*) "Here we go, setting parameters from form_params_system"
+  ! Here, we will need to read in the first full element from { to } and pick
+  ! it apart. We do know the structure of it before-hand, and will assume all
+  ! values will be TEXT and that we will have to convert some of them to integers
+  ! should the Fortran require integers (and it will for TOTSIM and MAXBRACK).
+  ! This fortran type should be added to the database and sent as another key-value pair
+  ! For now, just going to make some assumptions.
 
+  call json%parse(file='src/form_params_system.json', p=p)
+  !call json%print(p,output_unit)
+  call json%get(p,"(1).ID",p1) ! since there is no name, just use the index to get at the element.
+  call json%print(p1,output_unit) ! this should return 2, the value of ID for the first record.
+  ID = p1
+  write(*,*) "ID = ",ID
+  !call json%get(p,"system(10).ID",p1) ! there is no 10
+
+  !call json%get(p1, "ID(1)",p2)
+  !call json%print(p2,output_unit)
+!get(data(1).array(1))
+
+  ! for testing from unit test code
+  !call json%parse(p, '{"cities": ["New York","Los Angeles","Chicago"], '//&
+  !                       '"value": 1, "iflag": true, "struct":{"vec":[1,2,3]}}')
+  !call json%get(p,"cities",p1)
+  !call json%print(p1,output_unit)
+end subroutine
 
 
 

@@ -1,0 +1,62 @@
+  [
+    {
+        "ID": 2,
+        "FORMAT": "TOTSIM",
+        "CONTROL": 0,
+        "EDIT_EXTERNALLY": 0,
+        "EDIT_INTERNALLY": 0,
+        "HTMLTYPE": 0,
+        "HELP_ID": null,
+        "LABEL": "TOTSIM",
+        "DESCRIPTION": "TOTSIM",
+        "GROUPNAME": "Base Parameters",
+        "ROWNUM": 1,
+        "PARAM": "TOTSIM",
+        "VAL": "50"
+    },
+    {
+        "ID": 3,
+        "FORMAT": "MAXBRACK",
+        "CONTROL": 0,
+        "EDIT_EXTERNALLY": 0,
+        "EDIT_INTERNALLY": 0,
+        "HTMLTYPE": 0,
+        "HELP_ID": null,
+        "LABEL": "MAXBRACK",
+        "DESCRIPTION": "MAXBRACK",
+        "GROUPNAME": "Base Parameters",
+        "ROWNUM": 2,
+        "PARAM": "MAXBRACK",
+        "VAL": "7"
+    },
+    {
+        "ID": 4,
+        "FORMAT": "AGEDATA",
+        "CONTROL": 0,
+        "EDIT_EXTERNALLY": 0,
+        "EDIT_INTERNALLY": 0,
+        "HTMLTYPE": 0,
+        "HELP_ID": null,
+        "LABEL": "AGEDATA",
+        "DESCRIPTION": "AGEDATA",
+        "GROUPNAME": "Base Parameters",
+        "ROWNUM": 3,
+        "PARAM": "AGEDATA",
+        "VAL": ".TRUE."
+    },
+    {
+        "ID": 5,
+        "FORMAT": "WEIGHT",
+        "CONTROL": 0,
+        "EDIT_EXTERNALLY": 0,
+        "EDIT_INTERNALLY": 0,
+        "HTMLTYPE": 0,
+        "HELP_ID": null,
+        "LABEL": "WEIGHT",
+        "DESCRIPTION": "WEIGHT",
+        "GROUPNAME": "Base Parameters",
+        "ROWNUM": 4,
+        "PARAM": "WEIGHT",
+        "VAL": "STAGE2"
+    }
+  ]

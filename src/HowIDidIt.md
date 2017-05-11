@@ -38,8 +38,98 @@ my_sim_model.o: src/my_sim_model.f90
 
 What are all these % signs in the code? It's the equivalent of the . in C++. Makes complete sense.
 
+**First Prototype**
+
+The json file was like
+
+```json
+{
+  "FILE7" : "test-fort-json-output.txt",
+  "TOTSIM": 2,
+  "MAXBRACK": 7
+}
+```
+
+And then the code to open, and read in TOTSIM was
+
+```fortran
+type(json_file) :: json
+call json%initialize()
+call json%load_file(filename = 'src/params.json')
+call json%get('TOTSIM', TOTSIM, found)
+if (.not. found) then
+	write(*,*) "Could not find TOTSIM" !TODO, this should exit because it's a real problem
+else
+	write(*,*) "Found TOTSIM ", TOTSIM
+end if
+
+```
+
+which resulted in the number 2 being read from the JSON file and saved to TOTSIM
+
+**Second Prototype**
+
+In practice, the JSON created by the Django API looks like the following
+
+```json
+[
+	{
+			"ID": 2,
+			"FORMAT": "TOTSIM",
+			"CONTROL": 0,
+			"EDIT_EXTERNALLY": 0,
+			"EDIT_INTERNALLY": 0,
+			"HTMLTYPE": 0,
+			"HELP_ID": null,
+			"LABEL": "TOTSIM",
+			"DESCRIPTION": "TOTSIM",
+			"GROUPNAME": "Base Parameters",
+			"ROWNUM": 1,
+			"PARAM": "TOTSIM",
+			"VAL": "50"
+	},
+	{
+			"ID": 3,
+			"FORMAT": "MAXBRACK",
+			"CONTROL": 0,
+			"EDIT_EXTERNALLY": 0,
+			"EDIT_INTERNALLY": 0,
+			"HTMLTYPE": 0,
+			"HELP_ID": null,
+			"LABEL": "MAXBRACK",
+			"DESCRIPTION": "MAXBRACK",
+			"GROUPNAME": "Base Parameters",
+			"ROWNUM": 2,
+			"PARAM": "MAXBRACK",
+			"VAL": "7"
+	}
+]
+```
+
+This meant there was a little more to do in order to pull out the data from each JSON object in our array. Also note that the array of objects is nameless. Fortran code to read became
+
+```Fortran
+type(json_core) :: json
+type(json_value),pointer :: p,p1,p2
+
+call json%parse(file='src/form_params_system.json', p=p)
+call json%get(p,"(1).ID",p1)    ! since there is no name, just use the index to get at the element.
+call json%print(p1,output_unit) ! this should return 2, the value of ID for the first record.
+
+```
+
+If the array of objects had a name, say <code>system</code> then the line that gets the element would be <code>call json%get(p,"system(1).ID",p1)</code>
+
+This does not do everything yet, I still have to write code to look-up the value of <code>PARAM</code> for each object, then save the <code>VAL</code> into the correct variable. 
+
 ### What is left to figure out?
+
+**First Prototype Remaining Thoughts**
 
 It seems easy to read the JSON file if we know the name of the item, and the type that it is supposed to be. Also seems to make sense that Fortran would really need to know before reading what type we are reading in. Could we just look for every single item that it **could** be and override a default? Is there a better way? This is important because we want to vary what is input, and not break anything, and also need to know how to look up things. Plus, only want to write the code to read the file once. But it would break if we added a new item and didn't edit the code to read that new item. Order though will no longer matter.
 
 And non-trivially, need to sort out an array read and make sure that it comes in the right way.
+
+**Second Prototype Remaining Thoughts**
+
+Still not sure the best way to read the object -- particularly the array rules. The number of columns and the variables that we are going to look for is going to vary. I don't want to know what the names are going to be. Am I going to need that separately? Or will I just want to read everything? And how to know what everything is?
