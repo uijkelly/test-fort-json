@@ -185,8 +185,6 @@ subroutine set_parameters_system
   !call json%print(p,output_unit)
   call json%get(p,"(1).ID",p1) ! since there is no name, just use the index to get at the element.
   call json%print(p1,output_unit) ! this should return 2, the value of ID for the first record.
-  ID = p1
-  write(*,*) "ID = ",ID
   !call json%get(p,"system(10).ID",p1) ! there is no 10
 
   !call json%get(p1, "ID(1)",p2)
