@@ -120,10 +120,19 @@ call json%print(p1,output_unit) ! this should return 2, the value of ID for the 
 
 If the array of objects had a name, say <code>system</code> then the line that gets the element would be <code>call json%get(p,"system(1).ID",p1)</code>
 
-This does not do everything yet, I still have to write code to look-up the value of <code>PARAM</code> for each object, then save the <code>VAL</code> into the correct variable. 
+This does not do everything yet, I still have to write code to look-up the value of <code>PARAM</code> for each object, then save the <code>VAL</code> into the correct variable.
 
-### What is left to figure out?
+**Third Prototype**
 
+This includes a variable called <code>count</code> in the JSON to indicate how many elements are in the main field, an array now called <code>data</code> that was without a name previously.
+
+Lastly, all the <code>VAL</code> elements are now string, and will need to be converted to the proper type as given in the field <code>FORTRAN_TYPE</code>
+
+Array rules -- the "yearly" parameters -- will be split out into Baseline and Proposal.
+
+---
+ What is left to figure out?
+---
 **First Prototype Remaining Thoughts**
 
 It seems easy to read the JSON file if we know the name of the item, and the type that it is supposed to be. Also seems to make sense that Fortran would really need to know before reading what type we are reading in. Could we just look for every single item that it **could** be and override a default? Is there a better way? This is important because we want to vary what is input, and not break anything, and also need to know how to look up things. Plus, only want to write the code to read the file once. But it would break if we added a new item and didn't edit the code to read that new item. Order though will no longer matter.
