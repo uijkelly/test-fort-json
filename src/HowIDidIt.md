@@ -130,6 +130,18 @@ Lastly, all the <code>VAL</code> elements are now string, and will need to be co
 
 Array rules -- the "yearly" parameters -- will be split out into Baseline and Proposal.
 
+For looping, need to construct the string "data(i)" where i is the loop increment, for each read of the json file. Used https://stackoverflow.com/questions/1262695/convert-integers-to-strings-to-create-output-filenames-at-run-time as resource here.
+
+Code here is as follows:
+```fortran
+integer:: i !for loop
+character(len=:), allocatable :: element ! for generating the data string
+character(len=5) :: charI
+i=1
+write(charI,"(I1)") i ! here the length is going to need to be adjusted. fine.
+element = "data("//trim(charI)//")"
+```
+
 ---
  What is left to figure out?
 ---

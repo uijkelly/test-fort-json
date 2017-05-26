@@ -197,7 +197,7 @@ subroutine set_parameters_system
   call json%get(p,"count", count)
   write(*,*) "the count of elements is = ", count
   ! to get the whole thing that is just the first object
-  !TODO: ADD A LOOP so we do "data(i)"
+  !TODO: ADD TYPE CONVERSIONS AND SAVE TO REAL VARIABLES
   do i=1,count
     write(charI,"(I1)") i ! here the length is going to need to be adjusted. fine.
     element = "data("//trim(charI)//")"
@@ -205,8 +205,8 @@ subroutine set_parameters_system
     call json%get(p1,"PARAM",PARAM)
     call json%get(p1,"VAL", VAL)
     call json%get(p1,"CONTROL",CONTROL)
-    write(*,*) "from first object only PARAM = ",PARAM
-    write(*,*) "from first object only VAL = ", VAL
+    write(*,*) "PARAM = ",PARAM
+    write(*,*) "VAL = ", VAL
   enddo
 
 end subroutine
