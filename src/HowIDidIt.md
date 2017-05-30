@@ -154,3 +154,7 @@ And non-trivially, need to sort out an array read and make sure that it comes in
 **Second Prototype Remaining Thoughts**
 
 Still not sure the best way to read the object -- particularly the array rules. The number of columns and the variables that we are going to look for is going to vary. I don't want to know what the names are going to be. Am I going to need that separately? Or will I just want to read everything? And how to know what everything is?
+
+**Third Prototype Remaining Thoughts**
+
+Work out the best way to do the formatted reads -- if we need a function, or if that function already exists in the main model code and we can just leverage it (seems likely possibility).

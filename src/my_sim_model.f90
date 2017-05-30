@@ -204,12 +204,44 @@ subroutine set_parameters_system
     call json%get(p,element,p1) ! put it all into p1
     call json%get(p1,"PARAM",PARAM)
     call json%get(p1,"VAL", VAL)
-    call json%get(p1,"CONTROL",CONTROL)
+    call json%get(p1,"FORTRAN_TYPE",FORTRAN_TYPE)
     write(*,*) "PARAM = ",PARAM
     write(*,*) "VAL = ", VAL
+    write(*,*) "FORTRAN_TYPE = ", FORTRAN_TYPE
+    ! next, put that value into the right variable.
+    ! i need function that takes a character string and translates to integer
+    ! and is passed a variable name and a format length
+
+    ! integers
+    if (PARAM == "TOTSIM") then
+      read (VAL,"(I4)") TOTSIM
+      write(*,*) "  converting to integer totsim is =", TOTSIM
+
+    elseif (PARAM == "MAXBRACK") then
+      read (VAL,"(I3)") MAXBRACK
+      write(*,*) "  converting to integer maxbrack is = ", MAXBRACK
+
+    ! logicals
+    elseif (PARAM == "AGEDATA") then
+      read (VAL,"(L2)") AGEDATA
+      write(*,*) "  converting to logical agedata is = ", AGEDATA
+
+    ! character, just need to get the length right.
+    else if (PARAM == "WEIGHT") then
+      read(VAL, "(A6)") WEIGHT
+      write(*,*) "  converting to right length weight is = ", WEIGHT
+
+
+    end if
   enddo
 
 end subroutine
+
+! Description: takes string and converts to format as passed saving to variable passed
+subroutine convtert_str_to_integer()
+
+end subroutine
+
 
 ! Description: Array rules
 !  Let's see what kind of fun craziness we get into here. Hopefully any issues can be
